@@ -302,9 +302,9 @@
 
         for (var c = 0; c < data.headers.length; c++) {
           var colSpanTotal = chunkData.length + 1; 
-          if (c === 3) html += '<tr><td colspan="'+colSpanTotal+'" class="text-center section-title" style="background-color: #98FF98; font-weight: bold; color: #006400;">PENGHASILAN</td></tr>';
-          if (c === 4) html += '<tr><td colspan="'+colSpanTotal+'" class="text-center section-title" style="background-color: #FFD8A8; font-weight: bold; color: #FF7518;">POTONGAN-POTONGAN</td></tr>';
-          if (c === 14) html += '<tr><td colspan="'+colSpanTotal+'" class="text-center section-title" style="background-color: #89CFF0; font-weight: bold; color: #00008B;">JUMLAH POTONGAN</td></tr>';
+          if (c === 3) html += '<tr><td colspan="'+colSpanTotal+'" class="text-center section-title" style="background-color: #D3D3D3; font-weight: bold; color: #050505;">PENGHASILAN</td></tr>';
+          if (c === 4) html += '<tr><td colspan="'+colSpanTotal+'" class="text-center section-title" style="background-color: #D3D3D3; font-weight: bold; color: #050505;">POTONGAN-POTONGAN</td></tr>';
+          if (c === 14) html += '<tr><td colspan="'+colSpanTotal+'" class="text-center section-title" style="background-color: #D3D3D3; font-weight: bold; color: #050505;">JUMLAH POTONGAN</td></tr>';
           if (c === 15) html += '<tr><td colspan="'+colSpanTotal+'" class="text-center section-title" style="background-color: #D3D3D3; font-weight: bold; color: #050505;">SISA GAJI</td></tr>';
 
           html += '<tr><th class="table-header-col bg-light">' + (data.headers[c] || 'Kolom '+(c+1)) + '</th>';
