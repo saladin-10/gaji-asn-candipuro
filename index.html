@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Gaji ASN</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap" rel="stylesheet">
+  
+  <style>
+    body { 
+      background-image: url('https://images.unsplash.com/photo-1557683316-973673baf926?q=80&w=1920&auto=format&fit=crop'); 
+      background-color: #f4f6f9; 
+      background-size: cover;          
+      background-repeat: no-repeat;    
+      background-attachment: fixed;    
+      background-position: center;     
+      min-height: 100vh;               
+      font-family: 'Lora', serif; 
+      padding: 20px 10px; 
+    }
+
+    .card-box { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.0); margin-bottom: 20px; }
+    
+    .select2-container .select2-selection--single { 
+      height: 38px !important; 
+      border: 1px solid #dee2e6 !important; 
+      border-radius: 6px !important; 
+      padding-top: 2px;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__rendered { 
+      line-height: 34px !important; 
+      color: #212529;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__arrow { 
+      height: 36px !important; 
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered { line-height: 38px; }
+    .select2-container--default .select2-selection--single .select2-selection__arrow { height: 36px; }
+    
+    .table-header-col { background-color: #f8f9fa !important; font-weight: bold; width: 200px; color: #050505; }
+    
+    #resultArea .table-responsive { margin-top: 20px !important; }
+    #resultArea .table, 
+    #resultArea .table th, 
+    #resultArea .table td { border: 1px solid #000000 !important; }
+
+    @media screen and (min-width: 769px) {
+      #resultArea .card-box {
+        padding-top: 20px !important; padding-bottom: 40px !important;
+        padding-left: 30px !important; padding-right: 30px !important;
+        margin-top: 10px !important; margin-bottom: 50px !important;
+        width: 95% !important; max-width: 1100px !important; 
+        margin-left: auto !important; margin-right: auto !important;
+      }
+    }
+
+    @media screen and (max-width: 768px) {
+      #resultArea .card-box {
+        padding: 10px !important; margin-top: 15px !important;
+        margin-bottom: 30px !important; width: 100% !important; 
+      }
+      #resultArea .table { font-size: 12px !important; }
+    }
+      
+    /* === PENGATURAN CETAK (PRINT) DENGAN TAMBAHAN MARGIN === */
+    @media print {
+      /* Mengatur margin kertas secara mutlak dari sisi printer */
+      @page { 
+        size: 215mm 330mm; 
+        margin: 15mm 15mm 15mm 15mm; /* Atur besar margin kertas di sini: Atas Kanan Bawah Kiri */
+      }
+
+      body { 
+        background-color: #fff; 
+        padding: 0 !important; 
+        margin: 0 !important; 
+        font-family: 'NCR', 'Courier New', monospace !important; 
+      }
+      
+      .no-print { display: none !important; }
+      
+      .print-page { 
+        page-break-after: always; 
+        page-break-inside: avoid; 
+        
+        /* Menambahkan jarak/margin internal (padding) tambahan pada area cetak tiap halaman */
+        padding-top: 10px !important; 
+        padding-left: 5px !important;
+        padding-right: 5px !important;
+        padding-bottom: 10px !important;
+        
+        margin: 0 auto !important;
+        width: 100%;
+        -webkit-print-color-adjust: exact !important; 
+        print-color-adjust: exact !important;  
+      }
+      
+      .card-box { box-shadow: none !important; padding: 0 !important; margin: 0 !important; border: none !important; }
+      
+      .table {  
+        width: 100% !important;         
+        table-layout: auto !important; 
+        border: 1px solid #000 !important; 
+        margin: 0 auto 20px auto !important; 
+      }
+      
+      .table td, .table th { 
+        border: 1px solid #000 !important; 
+        font-size: 13px !important;     
+        padding: 6px 8px !important;     
+        white-space: normal !important;  
+      }
+
+      .section-title { 
+        font-size: 9.5px !important; 
+        padding: 2px !important; 
+        letter-spacing: 0px !important;
+      }
+
+      h4.text-center { 
+        font-size: 12px !important; 
+        margin-bottom: 8px !important; 
+        margin-top: 5px !important; 
+        line-height: 1.2 !important; 
+      }
+      
+      .bg-success { background-color: #198754 !important; color: #fff !important; }
+      .bg-danger { background-color: #dc3545 !important; color: #fff !important; }
+      .bg-warning { background-color: #ffc107 !important; color: #000 !important; }
+      .bg-primary { background-color: #0d6efd !important; color: #fff !important; }
+      .bg-light { background-color: #f8f9fa !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container-fluid no-print" style="max-width: 850px;">
+    <div class="card-box">
+      <h3 class="text-center text-black fw-bold mb-4" style="line-height: 1.5;"> 
+        <div class="mb-2" style="font-size: 1.3rem;">DATA GAJI ASN TAHUN 2026</div>
+        <div style="font-size: 1.3rem;">KORWIL DIKBUD KECAMATAN CANDIPURO</div>
+      </h3>
+      
+      <div class="row g-3 align-items-end">
+        <div class="col-md-4">
+          <label class="form-label fw-bold">1. Pilih Bulan</label>
+          <select id="sheetSelect" class="form-select" onchange="resetAndLoadOptions()"><option value="">LOADING...</option></select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label fw-bold">2. Pencarian Data</label>
+          <select id="typeSelect" class="form-select" onchange="resetAndLoadOptions()">
+            <option value="NIP">NIP</option><option value="UNIT">UNIT KERJA / SEKOLAH</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label fw-bold">3. Ketik Kriteria Pencarian</label>
+          <select id="keywordSelect" class="form-control" style="width: 100%;" disabled><option value="">Pilih Bulan Dahulu</option></select>
+        </div>
+      </div>
+
+      <div class="row mt-4">
+        <div class="col-6"><button id="btnPrint" class="btn w-100" onclick="printData()" style="background-color: #000; color: #FFD700; border-color: #FFD700; padding: 10px;" disabled>🖨️ Cetak PDF</button></div>     
+        <div class="col-6"><button id="btnSearch" class="btn w-100" onclick="doSearch()" style="background-color: #050505; color: #FFD700; border-color: #FFD700; padding: 10px;" disabled>View Data</button></div>
+      </div>
+
+      <div id="loading" class="text-center mt-4" style="display: none; color: #00008B; font-weight: bold;">
+        <div class="spinner-border spinner-border-sm"></div> <span id="loadingText">LOADING...</span> 
+      </div>
+      <div id="message" class="alert alert-danger mt-3 text-center" style="display: none;"></div>
+    </div>
+  </div>
+
+  <div id="resultArea" class="mt-4"></div>
+
+  <script>
+    // MASUKKAN URL WEB APP ANDA DI BAWAH INI
+    const API_URL = "https://script.google.com/macros/s/AKfycbzw-g-OfYx697J3N7hoK4E6lO-OYgG_-gBh6gBtkTdm-uL5GtUTKKJQgUI5JZyvSRKM/exec";
+    
+    let currentSearchType = 'NIP';
+
+    $(document).ready(function() {
+      // Mengaktifkan Select2 awal
+      $('#keywordSelect').select2({ placeholder: "Ketik untuk mencari...", allowClear: true });
+      document.getElementById('loadingText').innerText = "L O A D I N G ...";
+      document.getElementById('loading').style.display = 'block';
+      
+      fetch(API_URL + "?action=getInitialData")
+        .then(res => res.json())
+        .then(data => initDropdowns(data))
+        .catch(err => showMessage("Gagal memuat database"));
+    });
+
+    function initDropdowns(data) {
+      document.getElementById('loading').style.display = 'none';
+      if (data.error) return showMessage(data.error);
+
+      var select = document.getElementById('sheetSelect');
+      select.innerHTML = '<option value="">-- Pilih Bulan --</option>';
+      data.sheets.forEach(function(s) { select.add(new Option(s, s)); });
+    }
+
+    function resetAndLoadOptions() {
+      var sheet = document.getElementById('sheetSelect').value;
+      var type = document.getElementById('typeSelect').value;
+      currentSearchType = type;
+
+      $('#keywordSelect').empty().append('<option value="">-- Pilih Kriteria --</option>').prop('disabled', true);
+      document.getElementById('btnSearch').disabled = true;
+      document.getElementById('btnPrint').disabled = true;
+      hideMessage();
+
+      if (!sheet) return;
+
+      document.getElementById('loadingText').innerText = "LOADING ....";
+      document.getElementById('loading').style.display = 'block';
+
+      fetch(API_URL + "?action=getSearchOptions&sheet=" + encodeURIComponent(sheet) + "&type=" + encodeURIComponent(type))
+        .then(res => res.json())
+        .then(data => populateKeywords(data))
+        .catch(err => showMessage("Gagal memuat kriteria"));
+    }
+
+    function populateKeywords(data) {
+      document.getElementById('loading').style.display = 'none';
+      if (data.error) return showMessage(data.error);
+
+      var $keySelect = $('#keywordSelect');
+      data.options.forEach(function(opt) { $keySelect.append(new Option(opt, opt)); });
+      
+      $keySelect.prop('disabled', false);
+      document.getElementById('btnSearch').disabled = false;
+
+      if ($keySelect.hasClass("select2-hidden-accessible")) { $keySelect.select2('destroy'); }
+
+      var select2Config = { placeholder: "Ketik untuk mencari...", allowClear: true };
+      
+      if (currentSearchType === 'NIP') {
+        // Konfigurasi khusus NIP (diketik dari angka awal)
+        select2Config.minimumInputLength = 1; 
+        select2Config.matcher = function(params, data) {
+          if ($.trim(params.term) === '') return data;
+          if (typeof data.text === 'undefined') return null;
+          if (data.text.indexOf(params.term) === 0) return data;
+          return null;
+        };
+        select2Config.language = {
+          inputTooShort: function() { return "Ketikkan NIP Anda..."; },
+          noResults: function() { return "NIP Tidak Ditemukan"; }
+        };
+      } else {
+        // KONFIGURASI BARU UNTUK UNIT KERJA: Bisa diketik teks apa saja dan langsung muncul list-nya
+        select2Config.minimumInputLength = 1; // Mulai mencari setelah diketik minimal 1 huruf
+        select2Config.language = {
+          inputTooShort: function() { return "Ketik nama Unit Kerja / Sekolah..."; },
+          noResults: function() { return "Unit Kerja Tidak Ditemukan"; }
+        };
+      }
+
+      $keySelect.select2(select2Config);
+    }
+    
+    function doSearch() {
+      var sheet = document.getElementById('sheetSelect').value;
+      var type = document.getElementById('typeSelect').value;
+      var keyword = $('#keywordSelect').val();
+
+      if (!sheet || !keyword) return;
+
+      document.getElementById('loadingText').innerText = "L O A D I N G ...";
+      document.getElementById('loading').style.display = 'block';
+      document.getElementById('resultArea').innerHTML = '';
+      hideMessage();
+
+      fetch(API_URL + "?action=searchData&sheet=" + encodeURIComponent(sheet) + "&type=" + encodeURIComponent(type) + "&keyword=" + encodeURIComponent(keyword))
+        .then(res => res.json())
+        .then(data => renderTables(data))
+        .catch(err => showMessage("Gagal menampilkan data"));
+    }
+
+    function renderTables(data) {
+      document.getElementById('loading').style.display = 'none';
+      if (data.error) return showMessage(data.error);
+
+      document.getElementById('btnPrint').disabled = false;
+      var sheetName = document.getElementById('sheetSelect').value;
+      var html = '';
+      
+      var isUnitKerja = (data.searchType === 'UNIT');
+      var rowsPerTable = isUnitKerja ? 3 : 1; 
+
+      for (var chunkStart = 0; chunkStart < data.rows.length; chunkStart += rowsPerTable) {
+        var chunkData = data.rows.slice(chunkStart, chunkStart + rowsPerTable);
+        html += '<div class="print-page container-fluid d-flex justify-content-center">';
+        html += '<div class="w-100 card-box bg-white p-0">';
+        html += '<h4 class="text-center fw-bold mb-3">DAFTAR RINCIAN GAJI <br> BULAN : ' + sheetName.toUpperCase() + '</h4>';
+        html += '<div class="table-responsive" style="margin-top:0 !important;">';
+        html += '<table class="table table-bordered table-hover align-middle mb-0"><tbody>';
+
+        for (var c = 0; c < data.headers.length; c++) {
+          var colSpanTotal = chunkData.length + 1; 
+          if (c === 3) html += '<tr><td colspan="'+colSpanTotal+'" class="text-center section-title" style="background-color: #98FF98; font-weight: bold; color: #006400;">PENGHASILAN</td></tr>';
+          if (c === 4) html += '<tr><td colspan="'+colSpanTotal+'" class="text-center section-title" style="background-color: #FFD8A8; font-weight: bold; color: #FF7518;">POTONGAN-POTONGAN</td></tr>';
+          if (c === 14) html += '<tr><td colspan="'+colSpanTotal+'" class="text-center section-title" style="background-color: #89CFF0; font-weight: bold; color: #00008B;">JUMLAH POTONGAN</td></tr>';
+          if (c === 15) html += '<tr><td colspan="'+colSpanTotal+'" class="text-center section-title" style="background-color: #D3D3D3; font-weight: bold; color: #050505;">SISA GAJI</td></tr>';
+
+          html += '<tr><th class="table-header-col bg-light">' + (data.headers[c] || 'Kolom '+(c+1)) + '</th>';
+          var isAccounting = (c >= 3 && c <= 16); 
+          var alignClass = isAccounting ? 'text-end fw-semibold' : 'text-start';
+
+          for (var d = 0; d < chunkData.length; d++) {
+            html += '<td class="' + alignClass + '">' + (chunkData[d][c] || '-') + '</td>';
+          }
+          html += '</tr>';
+        }
+        html += '</tbody></table></div></div></div>';
+      }
+      document.getElementById('resultArea').innerHTML = html;
+    }
+
+    function printData() {
+      var style = document.getElementById('dynamicPrintStyle');
+      if (!style) {
+        style = document.createElement('style');
+        style.id = 'dynamicPrintStyle';
+        document.head.appendChild(style);
+      }
+      
+      /* === PENGATURAN MARGIN PDF (F4 PORTRAIT) === */
+      /* Urutan margin: Atas Kanan Bawah Kiri */
+      /* Silakan ubah angka 15mm (margin atas/bawah) dan 12mm (margin kiri/kanan) sesuai kebutuhan Anda */
+      style.innerHTML = "@page { size: 215mm 330mm; margin: 15mm 12mm 15mm 12mm; }"; 
+      
+      window.print();
+    }
+
+    function showMessage(msg) {
+      document.getElementById('loading').style.display = 'none';
+      var msgBox = document.getElementById('message');
+      msgBox.innerText = msg; msgBox.style.display = 'block';
+    }
+    function hideMessage() { document.getElementById('message').style.display = 'none'; }
+  </script>
+</body>
+</html>
