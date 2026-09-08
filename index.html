@@ -69,8 +69,7 @@
       
     /* === PENGATURAN CETAK (PRINT) DENGAN TAMBAHAN MARGIN === */
     @media print {
-      /* Mengatur margin kertas secara mutlak dari sisi printer */
-      @page { 
+        @page { 
         size: 215mm 330mm; 
         margin: 15mm 15mm 15mm 15mm; /* Atur besar margin kertas di sini: Atas Kanan Bawah Kiri */
       }
@@ -98,6 +97,9 @@
         width: 100%;
         -webkit-print-color-adjust: exact !important; 
         print-color-adjust: exact !important;  
+      }
+      .print-page:last-child {
+        page-break-after: auto !important; /* Membatalkan pindah halaman untuk tabel terakhir */
       }
       
       .card-box { box-shadow: none !important; padding: 0 !important; margin: 0 !important; border: none !important; }
